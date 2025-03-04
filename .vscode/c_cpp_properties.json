@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        },
+        {
+            "name": "rebble",
+            "includePath": [
+                "/home/rebble/pebble-dev/.pebble-sdk/SDKs/current/sdk-core/pebble/aplite/include",
+                "/home/rebble/pebble-dev/.pebble-sdk/SDKs/current/sdk-core/pebble/basalt/include",
+                "/home/rebble/pebble-dev/.pebble-sdk/SDKs/current/sdk-core/pebble/chalk/include",
+                "/home/rebble/pebble-dev/.pebble-sdk/SDKs/current/sdk-core/pebble/diorite/include",
+                "/home/rebble/pebble-dev/.pebble-sdk/SDKs/current/sdk-core/pebble/emery/include",
+                "/home/rebble/pebble-dev/.pebble-sdk/SDKs/current/sdk-core/pebble/common/include",
+                "${workspaceFolder}/**",
+                "${default}"
+            ]
+        }
+    ],
+    "version": 4
+}

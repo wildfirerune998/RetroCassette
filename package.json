@@ -1,10 +1,14 @@
 {
   "name": "RetroCassette",
-  "author": "MakeAwesomeHappen",
+  "author": "Hel",
   "version": "1.0.0",
-  "keywords": ["pebble-app"],
+  "keywords": [
+    "pebble-app"
+  ],
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "pebble-clay": "^1.0.4"
+  },
   "pebble": {
     "displayName": "RetroCassette",
     "uuid": "722b329c-2e56-4b88-ae94-704033d2f4dd",
@@ -13,17 +17,104 @@
     "targetPlatforms": [
       "aplite",
       "basalt",
-      "chalk",
       "diorite"
     ],
     "watchapp": {
-      "watchface": false
+      "watchface": true
     },
-    "messageKeys": [
-      "dummy"
+    "messageKeys": {
+      "READY": 1,
+      "ERA": 2
+    },
+    "capabilities": [
+      "location",
+      "configurable"
     ],
     "resources": {
-      "media": []
+      "media": [
+        {
+          "file": "images/loading.png",
+          "name": "LOADING",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/nine_bw.png",
+          "name": "NINE_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite",
+            "basalt"
+          ]
+        },
+        {
+          "file": "images/nine_color.png",
+          "name": "NINE_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt"
+          ]
+        },
+        {
+          "file": "images/eight_bw.png",
+          "name": "EIGHT_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite",
+            "basalt"
+          ]
+        },
+        {
+          "file": "images/eight_color.png",
+          "name": "EIGHT_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt"
+          ]
+        },
+        {
+          "file": "images/seven_bw.png",
+          "name": "SEVEN_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite",
+            "basalt"
+          ]
+        },
+        {
+          "file": "images/seven_color.png",
+          "name": "SEVEN_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt"
+          ]
+        },
+        {
+          "file": "images/six_bw.png",
+          "name": "SIX_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite",
+            "basalt"
+          ]
+        },
+        {
+          "file": "images/six_color.png",
+          "name": "SIX_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt"
+          ]
+        }
+      ]
     }
   }
 }

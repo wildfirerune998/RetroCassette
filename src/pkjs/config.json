@@ -1,0 +1,48 @@
+[
+  { "type": "section",
+    "items": 
+    [
+      {
+        "type": "select", 
+        "messageKey": "ERA",
+        "defaultValue": "nine",
+        "label": "Stylistic Era",
+        "options": [
+          { 
+            "label": "", 
+            "value": "" 
+          },
+          { 
+            "label": "1990s",
+            "value": "nine" 
+          },
+          { 
+            "label": "1980s",
+            "value": "eight" 
+          },
+          { 
+            "label": "1970s",
+            "value": "seven" 
+          },
+          { 
+            "label": "1960s",
+            "value": "six" 
+          }
+        ]
+        }
+    ]
+  },
+  { "type": "section",
+    "items": 
+    [
+      {
+        "type": "text",
+        "defaultValue": "Hiya!\n This watchface will update the background based on weather conditions and time of the day (OpenWeather key required).\n If you have any suggestions or feedback, please do not hesistate to email me at:\n Adhesiventelope@gmail.com :)"
+      },
+      {
+        "type": "submit",
+        "defaultValue": "Save"
+      }
+    ]
+  }
+]
