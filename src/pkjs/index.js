@@ -25,7 +25,7 @@ function sendToPebble() {
 
     // Send to Pebble
     Pebble.sendAppMessage(dictionary, function(e) {
-    console.log('era info sent to Pebble successfully!');
+    //console.log('era info sent to Pebble successfully!');
     },
     function(e) {
         console.log('Error sending era info to Pebble!');
@@ -57,7 +57,7 @@ Pebble.addEventListener('appmessage', function(e) {
         return;
     }
 
-    console.log('e.response ' + e.payload);
+    //console.log('e.response ' + e.payload);
     var era_string;
 
     era_string = JSON.stringify(e.payload.ERA);
@@ -71,7 +71,7 @@ var messageKeys = require('message_keys');
 
 Pebble.addEventListener('webviewclosed', function(e) {
   
-  console.log('e.response ' + e.response);
+  //console.log('e.response ' + e.response);
   if (e && !e.response) {
     return;
   };

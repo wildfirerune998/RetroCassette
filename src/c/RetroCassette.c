@@ -23,21 +23,15 @@ static GBitmap *s_bitmap;
 static BitmapLayer *s_bitmap_layer;
 
 // I'm making this global so that I can always get the value
-bool date;
 int tick_counter;
-
 
 // Save the settings to persistent storage
 static void default_settings() {
-
- // snprintf(settings.era, sizeof(settings.era), "%s", "nine");
-  APP_LOG(APP_LOG_LEVEL_ERROR, "default settings.era: %s", settings.era);
+  snprintf(settings.era, sizeof(settings.era), "%s", "nine");
 }
 
 // Save the settings to persistent storage
 static void save_settings() {
-  
-  APP_LOG(APP_LOG_LEVEL_ERROR, "save_settings settings.era: %s", settings.era);
   persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
 }
 
@@ -106,13 +100,13 @@ static void main_window_load(Window *window) {
   //////////////TIME LAYER////////////////////
   // Create the TextLayer with specific bounds 
   // s_time_layer = text_layer_create(GRect(PBL_IF_ROUND_ELSE(0, -20),PBL_IF_ROUND_ELSE(125, 125), bounds.size.w, bounds.size.h));
-  s_time_layer = text_layer_create(GRect(0 ,110, bounds.size.w, bounds.size.h));
+  s_time_layer = text_layer_create(GRect(0 ,85, bounds.size.w, bounds.size.h));
 
   // Improve the layout to be more like a watchface
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorBlack);
   text_layer_set_text(s_time_layer, "00:00");
-  text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
+  text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_LECO_42_NUMBERS));
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   // Add it as a child layer to the Window's root layer
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
@@ -142,7 +136,6 @@ static void update_background_bmp(DictionaryIterator *iterator) {
   Tuple *era_tuple = dict_find(iterator, ERA);
 
   if (era_tuple && strlen(era_tuple->value->cstring) > 0 ){
-    APP_LOG(APP_LOG_LEVEL_ERROR, "update_background_bmp era_tuple: %s", era_tuple->value->cstring);
     snprintf(settings.era, sizeof(settings.era), "%s", era_tuple->value->cstring);
   }
  
@@ -151,8 +144,9 @@ static void update_background_bmp(DictionaryIterator *iterator) {
   save_settings();
 
   APP_LOG(APP_LOG_LEVEL_ERROR, "update_background_bmp settings.era: %s", settings.era);
-  APP_LOG(APP_LOG_LEVEL_ERROR, "update_background_bmp settings.era strlen: %d", strlen(settings.era));
   if (strlen(settings.era)>0){
+    gbitmap_destroy(s_bitmap);
+    s_bitmap = NULL;
     if ((strstr(settings.era,"nine")) != NULL){  
       s_bitmap = PBL_IF_COLOR_ELSE(gbitmap_create_with_resource(RESOURCE_ID_NINE_COLOR), gbitmap_create_with_resource(RESOURCE_ID_NINE_BW));
     }  
@@ -170,7 +164,6 @@ static void update_background_bmp(DictionaryIterator *iterator) {
   }
   
   bitmap_layer_set_bitmap(s_bitmap_layer, s_bitmap);
-
 }
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
@@ -238,8 +231,6 @@ static void init() {
   const int inbox_size = 128;
   const int outbox_size = 128;
   app_message_open(inbox_size, outbox_size);
-
-  date = FALSE;
 
 }
 

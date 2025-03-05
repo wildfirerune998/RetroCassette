@@ -27,7 +27,6 @@
       "ERA": 2
     },
     "capabilities": [
-      "location",
       "configurable"
     ],
     "resources": {
