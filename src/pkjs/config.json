@@ -37,7 +37,7 @@
     [
       {
         "type": "text",
-        "defaultValue": "Hiya!\n This watchface will update the background based on weather conditions and time of the day (OpenWeather key required).\n If you have any suggestions or feedback, please do not hesistate to email me at:\n Adhesiventelope@gmail.com :)"
+        "defaultValue": "Hiya!\n This watchface will update the background based on the selected era (defauls to 1990s).\n If you have any suggestions or feedback, please do not hesistate to email me at:\n Adhesiventelope@gmail.com :)"
       },
       {
         "type": "submit",

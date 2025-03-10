@@ -19,11 +19,16 @@ static ClaySettings settings;
 
 static Window *s_main_window;
 static TextLayer *s_time_layer;
+static TextLayer *s_date_layer;
 static GBitmap *s_bitmap;
 static BitmapLayer *s_bitmap_layer;
+static Layer *s_window_layer;
 
 // I'm making this global so that I can always get the value
 int tick_counter;
+
+// Is the screen obstructed?
+static bool s_screen_is_obstructed;
 
 // Save the settings to persistent storage
 static void default_settings() {
@@ -78,19 +83,91 @@ static void update_time() {
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, s_buffer);
 
+  // Display this date to the other TextLayer
+  static char d_buffer[80];
+  strftime(d_buffer, sizeof(d_buffer), "%B %d", tick_time);
+  text_layer_set_text(s_date_layer, d_buffer);
+  
 }
+
+// Event fires once, before the obstruction appears or disappears
+static void prv_unobstructed_will_change(GRect final_unobstructed_screen_area, void *context) {
+  if (s_screen_is_obstructed) {
+    // Obstruction is about disappear
+  } else {
+    // Obstruction is about to appear
+  }
+  APP_LOG(APP_LOG_LEVEL_DEBUG,
+    "Available screen area: width: %d, height: %d",
+    final_unobstructed_screen_area.size.w,
+    final_unobstructed_screen_area.size.h);
+}
+
+// Event fires once, after obstruction appears or disappears
+static void prv_unobstructed_did_change(void *context) {
+  // Keep track if the screen is obstructed or not
+  s_screen_is_obstructed = !s_screen_is_obstructed;
+
+  if(s_screen_is_obstructed) {
+    // text_layer_set_text(s_text_layer, "Obstructed!");
+  } else {
+    // text_layer_set_text(s_text_layer, "Unobstructed!");
+  }
+}
+
+// Event fires frequently, while obstruction is appearing or disappearing
+static void prv_unobstructed_change(AnimationProgress progress, void *context) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Progress %d", (int)progress);
+
+  //text_layer_set_text(s_time_layer, "Changing!");
+
+  // Current unobstructed window size
+  GRect bounds = layer_get_unobstructed_bounds(s_window_layer);
+
+  // Move the text layers
+  GRect time_text_frame = layer_get_frame(text_layer_get_layer(s_time_layer));
+//  time_text_frame.origin.y = (bounds.size.h/2);
+  layer_set_frame(text_layer_get_layer(s_time_layer), time_text_frame);
+
+  GRect date_text_frame = layer_get_frame(text_layer_get_layer(s_date_layer));
+  layer_set_frame(text_layer_get_layer(s_date_layer), date_text_frame);
+
+  GRect bitmap_frame = layer_get_frame(bitmap_layer_get_layer(s_bitmap_layer));
+
+  if (!s_screen_is_obstructed) {
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Not Obstructed");
+    bitmap_frame.origin.y = (bounds.size.h/4 -15);
+    time_text_frame.origin.y = (110);
+    date_text_frame.origin.y = (0);
+  } else {
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Obstructed");
+    
+    bitmap_frame.origin.y =  (-bounds.size.h/4);
+    time_text_frame.origin.y = (55);
+    date_text_frame.origin.y = (-110);
+  }
+  layer_set_frame(bitmap_layer_get_layer(s_bitmap_layer), bitmap_frame);
+  layer_set_frame(text_layer_get_layer(s_time_layer), time_text_frame);
+  layer_set_frame(text_layer_get_layer(s_date_layer), date_text_frame);
+}
+
 
 static void main_window_load(Window *window) {
   // Get information about the Window
-  Layer *window_layer = window_get_root_layer(window);
-  GRect bounds = layer_get_bounds(window_layer);
-  
+  s_window_layer = window_get_root_layer(window);
+  GRect bounds = layer_get_bounds(s_window_layer);
+  GRect fullscreen = layer_get_bounds(s_window_layer);
+  GRect unobstructed_bounds = layer_get_unobstructed_bounds(s_window_layer);
+
+  // Determine if the screen is obstructed when the app starts
+  s_screen_is_obstructed = grect_equal(&fullscreen, &unobstructed_bounds);
+
   //////////////BASIC LAYER////////////////////
   // Create the canvas Layer
   s_bitmap = gbitmap_create_with_resource(RESOURCE_ID_LOADING);
   
   bitmap_layer_set_bitmap(s_bitmap_layer, s_bitmap);
-  s_bitmap_layer = bitmap_layer_create(GRect(0,0, bounds.size.w, bounds.size.h));
+  s_bitmap_layer = bitmap_layer_create(GRect(0,(unobstructed_bounds.size.h/4 -15), unobstructed_bounds.size.w, unobstructed_bounds.size.h));
   bitmap_layer_set_compositing_mode(s_bitmap_layer, GCompOpSet);
    
   bitmap_layer_set_bitmap(s_bitmap_layer, s_bitmap);
@@ -100,24 +177,53 @@ static void main_window_load(Window *window) {
   //////////////TIME LAYER////////////////////
   // Create the TextLayer with specific bounds 
   // s_time_layer = text_layer_create(GRect(PBL_IF_ROUND_ELSE(0, -20),PBL_IF_ROUND_ELSE(125, 125), bounds.size.w, bounds.size.h));
-  s_time_layer = text_layer_create(GRect(0 ,85, bounds.size.w, bounds.size.h));
+  s_time_layer = text_layer_create(GRect(0, 110, unobstructed_bounds.size.w, unobstructed_bounds.size.h));
 
   // Improve the layout to be more like a watchface
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorBlack);
   text_layer_set_text(s_time_layer, "00:00");
-  text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_LECO_42_NUMBERS));
+  text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   // Add it as a child layer to the Window's root layer
-  layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
+  layer_add_child(s_window_layer, text_layer_get_layer(s_time_layer));
    
+  //////////////DATE LAYER////////////////////
+  // Create the TextLayer with specific bounds 
+  // s_date_layer = text_layer_create(GRect(PBL_IF_ROUND_ELSE(0, -20),PBL_IF_ROUND_ELSE(125, 125), bounds.size.w, bounds.size.h));
+  s_date_layer = text_layer_create(GRect(0, 0, unobstructed_bounds.size.w, unobstructed_bounds.size.h));
+
+  // Improve the layout for humans
+  text_layer_set_background_color(s_date_layer, GColorClear);
+  text_layer_set_text_color(s_date_layer, GColorBlack);
+  //text_layer_set_text(s_date_layer, "August 31");
+  text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+  text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
+  // Add it as a child layer to the Window's root layer
+  layer_add_child(s_window_layer, text_layer_get_layer(s_date_layer));
+  
+
+   
+  // Subscribe to the unobstructed area events
+  UnobstructedAreaHandlers handlers = {
+    .will_change = prv_unobstructed_will_change,
+    .change = prv_unobstructed_change,
+    .did_change = prv_unobstructed_did_change
+  };
+  unobstructed_area_service_subscribe(handlers, NULL);
+
   // Make sure the time is displayed from the start
   update_time();
 }
 
 static void main_window_unload(Window *window) {
-  // Destroy TextLayer
+  
+  // Unsubscribe from the unobstructed area service
+  unobstructed_area_service_unsubscribe();
+
+  // Destroy TextLayers
   text_layer_destroy(s_time_layer);
+  text_layer_destroy(s_date_layer);
   //Destroy the BG
   gbitmap_destroy(s_bitmap);
   bitmap_layer_destroy(s_bitmap_layer);
@@ -143,7 +249,7 @@ static void update_background_bmp(DictionaryIterator *iterator) {
   //HEL TO DO, does this get over written when nothing is returned for those values?
   save_settings();
 
-  APP_LOG(APP_LOG_LEVEL_ERROR, "update_background_bmp settings.era: %s", settings.era);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "update_background_bmp settings.era: %s", settings.era);
   if (strlen(settings.era)>0){
     gbitmap_destroy(s_bitmap);
     s_bitmap = NULL;
@@ -187,8 +293,7 @@ static void inbox_dropped_callback(AppMessageResult reason, void *context) {
   APP_LOG(APP_LOG_LEVEL_ERROR, "inbox_dropped_callback Message dropped! Reason: %d", (int)reason);
 }
 
-static void outbox_failed_callback(DictionaryIterator *iter,
-                                      AppMessageResult reason, void *context) {
+static void outbox_failed_callback(DictionaryIterator *iter, AppMessageResult reason, void *context) {
   // The message just sent failed to be delivered
   APP_LOG(APP_LOG_LEVEL_ERROR, "outbox_failed_callback Message send failed. Reason: %d", (int)reason);
 }
