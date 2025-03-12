@@ -5,12 +5,12 @@
       {
         "type": "select", 
         "messageKey": "ERA",
-        "defaultValue": "nine",
+        "defaultValue": "random",
         "label": "Stylistic Era",
         "options": [
           { 
-            "label": "", 
-            "value": "" 
+            "label": "Random", 
+            "value": "random" 
           },
           { 
             "label": "1990s",
@@ -37,7 +37,7 @@
     [
       {
         "type": "text",
-        "defaultValue": "Hiya!\n This watchface will update the background based on the selected era (defauls to 1990s).\n If you have any suggestions or feedback, please do not hesistate to email me at:\n Adhesiventelope@gmail.com :)"
+        "defaultValue": "Hiya!\n This watchface will update the background based on the selected era (defauls to 1990s).\n Note, 'Random' will automatically change the image every 30min."
       },
       {
         "type": "submit",

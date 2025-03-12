@@ -27,12 +27,27 @@ static Layer *s_window_layer;
 // I'm making this global so that I can always get the value
 int tick_counter;
 
+int background_round_y_pos = 27;
+int background_square_y_pos = 27;
+int background_round_y_pos_obst = -25;
+int background_square_y_pos_obst = -42;
+
+int time_round_y_pos = 125;
+int time_round_y_pos_obst = 70;
+int time_square_y_pos = 110;
+int time_square_y_pos_obst = 55;
+
+int date_round_y_pos = 10;
+int date_round_y_pos_obst = -100;
+int date_square_y_pos = 0;
+int date_square_y_pos_obst = -110;
+
 // Is the screen obstructed?
 static bool s_screen_is_obstructed;
 
 // Save the settings to persistent storage
 static void default_settings() {
-  snprintf(settings.era, sizeof(settings.era), "%s", "nine");
+  snprintf(settings.era, sizeof(settings.era), "%s", "random");
 }
 
 // Save the settings to persistent storage
@@ -121,9 +136,6 @@ static void prv_unobstructed_change(AnimationProgress progress, void *context) {
 
   //text_layer_set_text(s_time_layer, "Changing!");
 
-  // Current unobstructed window size
-  GRect bounds = layer_get_unobstructed_bounds(s_window_layer);
-
   // Move the text layers
   GRect time_text_frame = layer_get_frame(text_layer_get_layer(s_time_layer));
 //  time_text_frame.origin.y = (bounds.size.h/2);
@@ -134,17 +146,18 @@ static void prv_unobstructed_change(AnimationProgress progress, void *context) {
 
   GRect bitmap_frame = layer_get_frame(bitmap_layer_get_layer(s_bitmap_layer));
 
+  
   if (!s_screen_is_obstructed) {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Not Obstructed");
-    bitmap_frame.origin.y = (bounds.size.h/4 -15);
-    time_text_frame.origin.y = (110);
-    date_text_frame.origin.y = (0);
+    bitmap_frame.origin.y = PBL_IF_ROUND_ELSE(background_round_y_pos, background_square_y_pos);
+    time_text_frame.origin.y = PBL_IF_ROUND_ELSE(time_round_y_pos, time_square_y_pos);
+    date_text_frame.origin.y = PBL_IF_ROUND_ELSE(date_round_y_pos, date_square_y_pos);
+
   } else {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Obstructed");
-    
-    bitmap_frame.origin.y =  (-bounds.size.h/4);
-    time_text_frame.origin.y = (55);
-    date_text_frame.origin.y = (-110);
+    bitmap_frame.origin.y =  PBL_IF_ROUND_ELSE(background_round_y_pos_obst, background_square_y_pos_obst);
+    time_text_frame.origin.y = PBL_IF_ROUND_ELSE(time_round_y_pos_obst, time_square_y_pos_obst);
+    date_text_frame.origin.y = PBL_IF_ROUND_ELSE(date_round_y_pos_obst, date_square_y_pos_obst);
   }
   layer_set_frame(bitmap_layer_get_layer(s_bitmap_layer), bitmap_frame);
   layer_set_frame(text_layer_get_layer(s_time_layer), time_text_frame);
@@ -155,7 +168,6 @@ static void prv_unobstructed_change(AnimationProgress progress, void *context) {
 static void main_window_load(Window *window) {
   // Get information about the Window
   s_window_layer = window_get_root_layer(window);
-  GRect bounds = layer_get_bounds(s_window_layer);
   GRect fullscreen = layer_get_bounds(s_window_layer);
   GRect unobstructed_bounds = layer_get_unobstructed_bounds(s_window_layer);
 
@@ -167,7 +179,7 @@ static void main_window_load(Window *window) {
   s_bitmap = gbitmap_create_with_resource(RESOURCE_ID_LOADING);
   
   bitmap_layer_set_bitmap(s_bitmap_layer, s_bitmap);
-  s_bitmap_layer = bitmap_layer_create(GRect(0,(unobstructed_bounds.size.h/4 -15), unobstructed_bounds.size.w, unobstructed_bounds.size.h));
+  s_bitmap_layer = bitmap_layer_create(GRect(0, PBL_IF_ROUND_ELSE(background_round_y_pos, background_square_y_pos), unobstructed_bounds.size.w, unobstructed_bounds.size.h));
   bitmap_layer_set_compositing_mode(s_bitmap_layer, GCompOpSet);
    
   bitmap_layer_set_bitmap(s_bitmap_layer, s_bitmap);
@@ -176,34 +188,30 @@ static void main_window_load(Window *window) {
 
   //////////////TIME LAYER////////////////////
   // Create the TextLayer with specific bounds 
-  // s_time_layer = text_layer_create(GRect(PBL_IF_ROUND_ELSE(0, -20),PBL_IF_ROUND_ELSE(125, 125), bounds.size.w, bounds.size.h));
-  s_time_layer = text_layer_create(GRect(0, 110, unobstructed_bounds.size.w, unobstructed_bounds.size.h));
+  s_time_layer = text_layer_create(GRect(0, PBL_IF_ROUND_ELSE(time_round_y_pos, time_square_y_pos), unobstructed_bounds.size.w, unobstructed_bounds.size.h));
 
   // Improve the layout to be more like a watchface
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorBlack);
   text_layer_set_text(s_time_layer, "00:00");
-  text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
+  text_layer_set_font(s_time_layer, PBL_IF_ROUND_ELSE(fonts_get_system_font(FONT_KEY_BITHAM_34_MEDIUM_NUMBERS), fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49)));
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   // Add it as a child layer to the Window's root layer
   layer_add_child(s_window_layer, text_layer_get_layer(s_time_layer));
    
   //////////////DATE LAYER////////////////////
   // Create the TextLayer with specific bounds 
-  // s_date_layer = text_layer_create(GRect(PBL_IF_ROUND_ELSE(0, -20),PBL_IF_ROUND_ELSE(125, 125), bounds.size.w, bounds.size.h));
-  s_date_layer = text_layer_create(GRect(0, 0, unobstructed_bounds.size.w, unobstructed_bounds.size.h));
+  s_date_layer = text_layer_create(GRect(0, PBL_IF_ROUND_ELSE(date_round_y_pos, date_square_y_pos), unobstructed_bounds.size.w, unobstructed_bounds.size.h));
 
   // Improve the layout for humans
   text_layer_set_background_color(s_date_layer, GColorClear);
   text_layer_set_text_color(s_date_layer, GColorBlack);
-  //text_layer_set_text(s_date_layer, "August 31");
   text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
   // Add it as a child layer to the Window's root layer
   layer_add_child(s_window_layer, text_layer_get_layer(s_date_layer));
   
 
-   
   // Subscribe to the unobstructed area events
   UnobstructedAreaHandlers handlers = {
     .will_change = prv_unobstructed_will_change,
@@ -229,40 +237,47 @@ static void main_window_unload(Window *window) {
   bitmap_layer_destroy(s_bitmap_layer);
 }
 
-static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+static void set_background(){
 
-  update_time();
- 
-}
+  char era[25];
 
-// BEGIN background shenanigans
-static void update_background_bmp(DictionaryIterator *iterator) {
-  
-  // Read tuples for data
-  Tuple *era_tuple = dict_find(iterator, ERA);
-
-  if (era_tuple && strlen(era_tuple->value->cstring) > 0 ){
-    snprintf(settings.era, sizeof(settings.era), "%s", era_tuple->value->cstring);
-  }
- 
-  // We're done looking at the settings returned. let's save it for future use.
-  //HEL TO DO, does this get over written when nothing is returned for those values?
-  save_settings();
-
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "update_background_bmp settings.era: %s", settings.era);
   if (strlen(settings.era)>0){
     gbitmap_destroy(s_bitmap);
     s_bitmap = NULL;
-    if ((strstr(settings.era,"nine")) != NULL){  
+
+    snprintf(era, sizeof(era), "%s", settings.era);
+
+    if ((strstr(era,"random")) != NULL){ 
+      switch (rand() % (9 - 6 + 1) + 6) {
+        case 9:
+          snprintf(era, sizeof(era), "%s", "nine");
+          break;
+        case 8:
+          snprintf(era, sizeof(era), "%s", "eight");
+          break;
+        case 7:
+          snprintf(era, sizeof(era), "%s", "seven");
+          break;
+        case 6:
+          snprintf(era, sizeof(era), "%s", "six");
+          break;
+        default:
+          snprintf(era, sizeof(era), "%s", "nine");
+          break;
+      }
+    }
+    
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "get_background_setting settings.era: %s", era);
+    if ((strstr(era,"nine")) != NULL){  
       s_bitmap = PBL_IF_COLOR_ELSE(gbitmap_create_with_resource(RESOURCE_ID_NINE_COLOR), gbitmap_create_with_resource(RESOURCE_ID_NINE_BW));
     }  
-    if ((strstr(settings.era,"eight")) != NULL){  
+    if ((strstr(era,"eight")) != NULL){  
       s_bitmap = PBL_IF_COLOR_ELSE(gbitmap_create_with_resource(RESOURCE_ID_EIGHT_COLOR), gbitmap_create_with_resource(RESOURCE_ID_EIGHT_BW));
     }  
-    if ((strstr(settings.era,"seven")) != NULL){  
+    if ((strstr(era,"seven")) != NULL){  
       s_bitmap = PBL_IF_COLOR_ELSE(gbitmap_create_with_resource(RESOURCE_ID_SEVEN_COLOR), gbitmap_create_with_resource(RESOURCE_ID_SEVEN_BW));
     }  
-    if ((strstr(settings.era,"six")) != NULL){  
+    if ((strstr(era,"six")) != NULL){  
       s_bitmap = PBL_IF_COLOR_ELSE(gbitmap_create_with_resource(RESOURCE_ID_SIX_COLOR), gbitmap_create_with_resource(RESOURCE_ID_SIX_BW));
     }  
   } else {
@@ -271,6 +286,33 @@ static void update_background_bmp(DictionaryIterator *iterator) {
   
   bitmap_layer_set_bitmap(s_bitmap_layer, s_bitmap);
 }
+
+static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+
+  update_time();
+
+  // Update the background every 30min if random was selected
+  if (((strstr(settings.era,"random")) != NULL) && (tick_time->tm_min % 30 == 0)) {
+    set_background();
+  }
+}
+
+// BEGIN background shenanigans
+static void get_background_setting(DictionaryIterator *iterator) {
+
+  // Read tuples for data
+  Tuple *era_tuple = dict_find(iterator, ERA);
+
+  if (era_tuple && strlen(era_tuple->value->cstring) > 0 ){
+    snprintf(settings.era, sizeof(settings.era), "%s", era_tuple->value->cstring);
+  }
+ 
+  // We're done looking at the settings returned. let's save it for future use.
+  save_settings();
+
+  set_background();
+}
+ 
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   
@@ -285,7 +327,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     send_settings_update_items();
   } else {
     // otherwise, this is just a syle update for you
-    update_background_bmp(iterator);
+    get_background_setting(iterator);
   }
 }
 
