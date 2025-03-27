@@ -29,7 +29,13 @@
             "value": "six" 
           }
         ]
-        }
+      },
+      { 
+        "type": "toggle", 
+        "messageKey": "SHOWWEEKDAYSTYLE",
+        "label": "Show Weekday (instead of Month)",
+        "defaultValue": false
+      }
     ]
   },
   { "type": "section",
@@ -37,7 +43,7 @@
     [
       {
         "type": "text",
-        "defaultValue": "Hiya!\n This watchface will update the background based on the selected era (defauls to 1990s).\n Note, 'Random' will automatically change the image every 30min."
+        "defaultValue": "Hiya!\n This watchface will update the background based on the selected era (defaults to 'Random').\n Note, 'Random' will automatically change the image every 30min."
       },
       {
         "type": "submit",
