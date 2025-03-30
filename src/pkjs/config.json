@@ -1,0 +1,54 @@
+[
+  { "type": "section",
+    "items": 
+    [
+      {
+        "type": "select", 
+        "messageKey": "ERA",
+        "defaultValue": "random",
+        "label": "Stylistic Era",
+        "options": [
+          { 
+            "label": "Random", 
+            "value": "random" 
+          },
+          { 
+            "label": "1990s",
+            "value": "nine" 
+          },
+          { 
+            "label": "1980s",
+            "value": "eight" 
+          },
+          { 
+            "label": "1970s",
+            "value": "seven" 
+          },
+          { 
+            "label": "1960s",
+            "value": "six" 
+          }
+        ]
+      },
+      { 
+        "type": "toggle", 
+        "messageKey": "SHOWWEEKDAYSTYLE",
+        "label": "Show Weekday (instead of Month)",
+        "defaultValue": false
+      }
+    ]
+  },
+  { "type": "section",
+    "items": 
+    [
+      {
+        "type": "text",
+        "defaultValue": "Hiya!\n This watchface will update the background based on the selected era (defaults to 'Random').\n Note, 'Random' will automatically change the image every 30min."
+      },
+      {
+        "type": "submit",
+        "defaultValue": "Save"
+      }
+    ]
+  }
+]

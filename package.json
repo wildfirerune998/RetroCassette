@@ -1,0 +1,523 @@
+{
+  "name": "RetroCassette",
+  "author": "Hel",
+  "version": "1.5.0",
+  "keywords": [
+    "pebble-app"
+  ],
+  "private": true,
+  "dependencies": {
+    "pebble-clay": "^1.0.4"
+  },
+  "pebble": {
+    "displayName": "RetroCassette",
+    "uuid": "722b329c-2e56-4b88-ae94-704033d2f4dd",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "diorite",
+      "chalk"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": {
+      "READY": 1,
+      "ERA": 2,
+      "SHOWWEEKDAYSTYLE": 3
+    },
+    "capabilities": [
+      "configurable"
+    ],
+    "resources": {
+      "media": [
+        {
+          "file": "images/loading.png",
+          "name": "LOADING",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "diorite",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/nine_bw.png",
+          "name": "NINE_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/nine_color.png",
+          "name": "NINE_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/eight_bw.png",
+          "name": "EIGHT_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/eight_color.png",
+          "name": "EIGHT_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/seven_bw.png",
+          "name": "SEVEN_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/seven_color.png",
+          "name": "SEVEN_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/six_bw.png",
+          "name": "SIX_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/six_color.png",
+          "name": "SIX_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_loading.png",
+          "name": "TAPE_LOADING",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "diorite",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_01_six_bw.png",
+          "name": "TAPE_01_SIX_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_01_six_color.png",
+          "name": "TAPE_01_SIX_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_02_six_bw.png",
+          "name": "TAPE_02_SIX_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_02_six_color.png",
+          "name": "TAPE_02_SIX_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_03_six_bw.png",
+          "name": "TAPE_03_SIX_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_03_six_color.png",
+          "name": "TAPE_03_SIX_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_04_six_bw.png",
+          "name": "TAPE_04_SIX_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_04_six_color.png",
+          "name": "TAPE_04_SIX_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_05_six_bw.png",
+          "name": "TAPE_05_SIX_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_05_six_color.png",
+          "name": "TAPE_05_SIX_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_06_six_bw.png",
+          "name": "TAPE_06_SIX_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_06_six_color.png",
+          "name": "TAPE_06_SIX_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_01_seven_bw.png",
+          "name": "TAPE_01_SEVEN_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_01_seven_color.png",
+          "name": "TAPE_01_SEVEN_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_02_seven_bw.png",
+          "name": "TAPE_02_SEVEN_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_02_seven_color.png",
+          "name": "TAPE_02_SEVEN_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_03_seven_bw.png",
+          "name": "TAPE_03_SEVEN_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_03_seven_color.png",
+          "name": "TAPE_03_SEVEN_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_04_seven_bw.png",
+          "name": "TAPE_04_SEVEN_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_04_seven_color.png",
+          "name": "TAPE_04_SEVEN_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_05_seven_bw.png",
+          "name": "TAPE_05_SEVEN_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_05_seven_color.png",
+          "name": "TAPE_05_SEVEN_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_06_seven_bw.png",
+          "name": "TAPE_06_SEVEN_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_06_seven_color.png",
+          "name": "TAPE_06_SEVEN_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_01_eight_bw.png",
+          "name": "TAPE_01_EIGHT_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_01_eight_color.png",
+          "name": "TAPE_01_EIGHT_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_02_eight_bw.png",
+          "name": "TAPE_02_EIGHT_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_02_eight_color.png",
+          "name": "TAPE_02_EIGHT_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_03_eight_bw.png",
+          "name": "TAPE_03_EIGHT_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_03_eight_color.png",
+          "name": "TAPE_03_EIGHT_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_04_eight_bw.png",
+          "name": "TAPE_04_EIGHT_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_04_eight_color.png",
+          "name": "TAPE_04_EIGHT_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_05_eight_bw.png",
+          "name": "TAPE_05_EIGHT_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_05_eight_color.png",
+          "name": "TAPE_05_EIGHT_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_06_eight_bw.png",
+          "name": "TAPE_06_EIGHT_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_06_eight_color.png",
+          "name": "TAPE_06_EIGHT_COLOR",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk"
+          ]
+        },
+        {
+          "file": "images/tape/tape_01_nine_bw.png",
+          "name": "TAPE_01_NINE_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_02_nine_bw.png",
+          "name": "TAPE_02_NINE_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_03_nine_bw.png",
+          "name": "TAPE_03_NINE_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_04_nine_bw.png",
+          "name": "TAPE_04_NINE_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_05_nine_bw.png",
+          "name": "TAPE_05_NINE_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "aplite",
+            "diorite"
+          ]
+        },
+        {
+          "file": "images/tape/tape_06_nine_bw.png",
+          "name": "TAPE_06_NINE_BW",
+          "type": "bitmap",
+          "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "aplite",
+            "diorite"
+          ]
+        }
+      ]
+    }
+  }
+}
